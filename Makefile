@@ -1,11 +1,11 @@
 SRC = main.c sources/*.c #düzenle.
-CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=thread
 NAME = philo
 
 $(NAME): $(SRC)
 	$(CC) $(CFLAGS) $(SRC) -o $(NAME)
 clean:
-	rm -rf $(TARGET)
+	rm -rf $(NAME)
 fclean: clean
 
 re: fclean all

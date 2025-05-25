@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/25 19:29:55 by raydogmu          #+#    #+#             */
+/*   Updated: 2025/05/25 19:30:32 by raydogmu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_args	*args;
 
@@ -10,8 +22,7 @@ int main(int argc, char **argv)
 	if (!args)
 		return (1);
 	get_args(args, argv);
-	// devam.
 	free(args);
-	printf("calisti. :)");
-	return 0;
+	printf("calisti. :)\n");
+	return (0);
 }

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arg.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/25 19:30:43 by raydogmu          #+#    #+#             */
+/*   Updated: 2025/05/25 19:30:43 by raydogmu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../philo.h"
 
-int ft_char_check(const char *str)
+int	ft_char_check(const char *str)
 {
 	int	i;
 
@@ -33,8 +45,8 @@ int	ft_atoi(const char *str)
 
 int	arg_check(char **argv)
 {
-	int i;
-	int result;
+	int	i;
+	int	result;
 
 	result = 0;
 	i = 1;
