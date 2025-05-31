@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:29:55 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/05/31 13:05:10 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/05/31 17:22:07 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int	main(int argc, char **argv)
 	}
 	main_program(table);
 	free_table(table);
-	free(args);
 	//printf("calisti. :)\n");
 	//printf("%d \n", get_timestamp());
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 20:05:37 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/05/31 13:15:30 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/05/31 16:50:57 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ t_table	*init_table(t_args *args)
 		free(table);
 		return (NULL);
 	}
+	table->f = 0;
 	return (table);
 }
 
@@ -53,6 +54,7 @@ void	free_table(t_table *table)
 	pthread_mutex_destroy(&table->print_mutex);
 	free(table->forks);
 	free(table->philos);
+	free(table->args);
 	free(table);
 }
 
@@ -79,18 +81,13 @@ void	init_philo(t_philo *philo, int id, t_table *table)
 {
 	philo->id = id;
 	philo->args = table->args;
-	philo->last_meal = 0;
+	philo->last_meal = get_timestamp();
 	philo->thread = 0;
 	philo->meal_times = 0;
+	philo->f = &table->f;
 	philo->print = &table->print_mutex;
-	if (id == 0)
-		philo->left_fork = &table->forks[table->args->philo_num - 1];
-	else
-		philo->left_fork = &table->forks[id - 1];
-	if (id == table->args->philo_num - 1)
-		philo->right_fork = &table->forks[0];
-	else
-		philo->right_fork = &table->forks[id + 1];
+	philo->left_fork = &table->forks[id];
+	philo->right_fork = &table->forks[(id + 1) % table->args->philo_num];
 }
 
 void	init_philos(t_table *table)

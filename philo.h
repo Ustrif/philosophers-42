@@ -38,8 +38,9 @@ typedef struct s_philo
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*print;
-	int				last_meal;
+	long long		last_meal;
 	int				meal_times;
+	int				*f;
 }				t_philo;
 
 typedef struct s_table
@@ -49,16 +50,17 @@ typedef struct s_table
 	long			start_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_mutex;
+	int				f;
 }				t_table;
 
-int		arg_check(char **argv);
-void	get_args(t_args *args, char **argv);
-int		get_timestamp(void);
-t_table	*init_table(t_args *args);
-void	free_table(t_table *table);
-int		init_forks(t_table *table);
-void	init_philos(t_table *table);
-t_table	*get_my_table(t_args *args);
-void	main_program(t_table *table);
+int			arg_check(char **argv);
+void		get_args(t_args *args, char **argv);
+long long	get_timestamp(void);
+t_table		*init_table(t_args *args);
+void		free_table(t_table *table);
+int			init_forks(t_table *table);
+void		init_philos(t_table *table);
+t_table		*get_my_table(t_args *args);
+void		main_program(t_table *table);
 
 #endif
