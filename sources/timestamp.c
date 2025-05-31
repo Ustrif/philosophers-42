@@ -18,6 +18,6 @@ int	get_timestamp(void)
 	int				timestamp;
 
 	gettimeofday(&ts, NULL);
-	timestamp = ts.tv_usec / 1000;
+	timestamp = ts.tv_usec / 1000 + ts.tv_sec * 1000;
 	return (timestamp);
 }
