@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:05:16 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/05/31 13:11:50 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/05/31 13:31:37 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ void	*routine(void *p)
 		print_status(philo, "is eating", get_timestamp() - time, philo->id);
 		usleep(philo->args->time_to_eat);
 		philo->meal_times++;
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
 		philo->last_meal = get_timestamp();
 		print_status(philo, "is sleeping", get_timestamp() - time, philo->id);
 		usleep(philo->args->time_to_sleep);
