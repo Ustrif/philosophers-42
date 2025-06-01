@@ -6,11 +6,22 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:29:55 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/05/31 17:22:07 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/01 19:08:42 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	main_program(t_table *table)
+{
+	int	num;
+
+	num = table->args->philo_num;
+	if (num >= 2)
+		main_two(table);
+	else if (num == 1)
+		printf("ONE PHILO PROBLEM!\n");
+}
 
 int	main(int argc, char **argv)
 {
@@ -26,12 +37,10 @@ int	main(int argc, char **argv)
 	table = get_my_table(args);
 	if (!table)
 	{
-		printf("NO TABLE!");
+		printf("NO TABLE!\n");
 		free(args);
 	}
 	main_program(table);
 	free_table(table);
-	//printf("calisti. :)\n");
-	//printf("%d \n", get_timestamp());
 	return (0);
 }

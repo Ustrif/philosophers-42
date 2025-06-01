@@ -21,7 +21,7 @@
 
 # define INT_MAX 2147483647
 
-struct s_table;
+struct	s_table;
 
 typedef struct s_args
 {
@@ -47,7 +47,6 @@ typedef struct s_philo
 	int				full;
 }				t_philo;
 
-
 typedef struct s_table
 {
 	t_args			*args;
@@ -68,6 +67,7 @@ void		free_table(t_table *table);
 int			init_forks(t_table *table);
 void		init_philos(t_table *table);
 t_table		*get_my_table(t_args *args);
-void		main_program(t_table *table);
+void		main_two(t_table	*table);
+void		print_status(t_philo	*p, char *t, long long time, int id);
 
 #endif
