@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:05:16 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/01 14:05:21 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/01 14:18:01 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,10 @@ void	*monitor(void *table)
 	{
 		pthread_mutex_lock(&t->philos[i].state_mutex);
 		if ((get_timestamp() - t->philos[i].last_meal) > t->args->time_to_die)
+		{
+			pthread_mutex_unlock(&t->philos[i].state_mutex);
 			break ;
+		}
 		pthread_mutex_unlock(&t->philos[i].state_mutex);
 		usleep(500);
 		y = 0;
@@ -120,12 +123,21 @@ void	*monitor(void *table)
 void	main_two(t_table	*table)
 {
 	pthread_t	mt;
+	int			i;
 
-	pthread_create(&table->philos[0].thread, NULL, routine, &table->philos[0]);
-	pthread_create(&table->philos[1].thread, NULL, routine, &table->philos[1]);
+	i = 0;
+	while (i < table->args->philo_num)
+	{
+		pthread_create(&table->philos[i].thread, NULL, routine, &table->philos[i]);
+		i++;
+	}
 	pthread_create(&mt, NULL, monitor, table);
-	pthread_join(table->philos[0].thread, NULL);
-	pthread_join(table->philos[1].thread, NULL);
+	i = 0;
+	while (i < table->args->philo_num)
+	{
+		pthread_join(table->philos[i].thread, NULL);
+		i++;
+	}
 	pthread_join(mt, NULL);
 }
 
@@ -134,7 +146,7 @@ void	main_program(t_table *table)
 	int	num;
 
 	num = table->args->philo_num;
-	if (num == 2)
+	if (num >= 2 && num <= 3)
 		main_two(table);
 	/*if (num == 3)
 	else if (num % 2 == 0 && num > 4)*/
