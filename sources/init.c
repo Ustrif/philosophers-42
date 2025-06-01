@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 20:05:37 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/01 12:18:16 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/01 13:38:47 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ void	init_philo(t_philo *philo, int id, t_table *table)
 	philo->last_meal = get_timestamp();
 	philo->meal_times = 0;
 	pthread_mutex_init(&philo->state_mutex, NULL);
-	philo->dead = 0;
 	philo->full = 0;
 }
 

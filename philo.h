@@ -44,7 +44,6 @@ typedef struct s_philo
 	long long		last_meal;
 	int				meal_times;
 	pthread_mutex_t	state_mutex;
-	int				dead;
 	int				full;
 }				t_philo;
 
