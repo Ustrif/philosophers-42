@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:29:55 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/01 19:08:42 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/01 20:22:53 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,22 @@
 
 void	main_program(t_table *table)
 {
-	int	num;
+	int			num;
+	long long	time;
 
 	num = table->args->philo_num;
-	if (num >= 2)
+	if (num >= 2 && num % 2 == 0)
 		main_two(table);
+	else if (num >= 2 && num % 2 != 0)
+		main_odd(table);
 	else if (num == 1)
-		printf("ONE PHILO PROBLEM!\n");
+	{
+		time = get_timestamp() - table->start_time;
+		printf("%lld 1 has taken a fork\n", time);
+		usleep(table->args->time_to_die * 1000);
+		printf("%lld %d is dead\n", get_timestamp() - table->start_time, 1);
+		return ;
+	}
 }
 
 int	main(int argc, char **argv)
@@ -44,3 +53,5 @@ int	main(int argc, char **argv)
 	free_table(table);
 	return (0);
 }
+// -g kaldir.
+// 

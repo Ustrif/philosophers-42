@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:05:16 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/01 19:23:24 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/01 20:48:15 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	*monitor(void *table)
 		t->dead = 1;
 	pthread_mutex_unlock(&t->state_mutex);
 	if (flag)
-		printf("%lld %d died\n", get_timestamp() - time, i);
+		printf("%lld %d died\n", get_timestamp() - time, i + 1);
 	return (NULL);
 }
 
@@ -138,6 +138,35 @@ void	main_two(t_table	*table)
 	{
 		pthread_join(table->philos[i].thread, n);
 		i++;
+	}
+	pthread_join(mt, n);
+}
+
+void	main_odd(t_table *table)
+{
+	pthread_t	mt;
+	int			i;
+	void		*n;
+
+	i = 1;
+	n = NULL;
+	while (i < table->args->philo_num)
+	{
+		pthread_create(&table->philos[i].thread, n, routine, &table->philos[i]);
+		usleep(200);
+		i = i + 2;
+		if (i == table->args->philo_num)
+			i = 0;
+	}
+	pthread_create(&mt, n, monitor, table);
+	i = 1;
+	while (i < table->args->philo_num)
+	{
+		pthread_join(table->philos[i].thread, n);
+		usleep(200);
+		i = i + 2;
+		if (i == table->args->philo_num)
+			i = 0;
 	}
 	pthread_join(mt, n);
 }

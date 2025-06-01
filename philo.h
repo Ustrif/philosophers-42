@@ -68,6 +68,7 @@ int			init_forks(t_table *table);
 void		init_philos(t_table *table);
 t_table		*get_my_table(t_args *args);
 void		main_two(t_table	*table);
+void		main_odd(t_table *table);
 void		print_status(t_philo	*p, char *t, long long time, int id);
 
 #endif
