@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:05:16 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/01 10:37:58 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/01 13:22:36 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 void	print_status(t_philo	*p, char *t, int time, int id)
 {
 	pthread_mutex_lock(p->print);
-	printf("%d %d %s\n", time, id, t);
+	pthread_mutex_lock(&p->table->state_mutex);
+	if (p->table->dead != 1)
+		printf("%d %d %s\n", time, id, t);
+	pthread_mutex_unlock(&p->table->state_mutex);
 	pthread_mutex_unlock(p->print);
 }
 
@@ -28,13 +31,6 @@ void	*routine(void *p)
 	philo = (t_philo *) p;
 	while (1)
 	{
-		if (get_timestamp() - philo->last_meal > philo->args->time_to_die)
-		{
-			pthread_mutex_lock(&philo->state_mutex);
-			philo->dead = 1;
-			pthread_mutex_unlock(&philo->state_mutex);
-			break ;
-		}
 		if (philo->id % 2 == 0)
 		{
 			pthread_mutex_lock(philo->left_fork);
@@ -49,6 +45,24 @@ void	*routine(void *p)
 			pthread_mutex_lock(philo->left_fork);
 			print_status(philo, "has taken a fork", get_timestamp() - time, philo->id);
 		}
+		if (get_timestamp() - philo->last_meal > philo->args->time_to_die)
+		{
+			pthread_mutex_lock(&philo->state_mutex);
+			philo->dead = 1;
+			pthread_mutex_unlock(&philo->state_mutex);
+			pthread_mutex_unlock(philo->left_fork);
+			pthread_mutex_unlock(philo->right_fork);
+			break ;
+		}
+		pthread_mutex_lock(&philo->table->state_mutex);
+		if (philo->table->dead == 1)
+		{
+			pthread_mutex_unlock(philo->left_fork);
+			pthread_mutex_unlock(philo->right_fork);
+			pthread_mutex_unlock(&philo->table->state_mutex);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->table->state_mutex);
 		print_status(philo, "is eating", get_timestamp() - time, philo->id);
 		usleep(philo->args->time_to_eat * 1000);
 		philo->meal_times++;
@@ -85,6 +99,9 @@ void	*monitor(void *table)
 			i = 0;
 	}
 	pthread_mutex_unlock(&t->philos[i].state_mutex);
+	pthread_mutex_lock(&t->state_mutex);
+	t->dead = 1;
+	pthread_mutex_unlock(&t->state_mutex);
 	printf("%lld %d died\n", get_timestamp() - time, i);
 	return (NULL);
 }

@@ -21,6 +21,8 @@
 
 # define INT_MAX 2147483647
 
+struct s_table;
+
 typedef struct s_args
 {
 	int	philo_num;
@@ -34,6 +36,7 @@ typedef struct s_philo
 {
 	int				id;
 	t_args			*args;
+	struct s_table	*table;
 	pthread_t		thread;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
@@ -42,6 +45,7 @@ typedef struct s_philo
 	int				meal_times;
 	pthread_mutex_t	state_mutex;
 	int				dead;
+	int				full;
 }				t_philo;
 
 
@@ -49,9 +53,12 @@ typedef struct s_table
 {
 	t_args			*args;
 	t_philo			*philos;
-	long			start_time;
+	long long		start_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_mutex;
+	int				dead;
+	int				full_count;
+	pthread_mutex_t	state_mutex;
 }				t_table;
 
 int			arg_check(char **argv);

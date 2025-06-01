@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 20:05:37 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/01 10:24:33 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/01 12:18:16 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,11 @@ t_table	*init_table(t_args *args)
 		free(table);
 		return (NULL);
 	}
+	table->start_time = get_timestamp();
+	table->dead = 0;
+	table->full_count = 0;
 	pthread_mutex_init(&table->print_mutex, NULL);
+	pthread_mutex_init(&table->state_mutex, NULL);
 	return (table);
 }
 
@@ -45,6 +49,7 @@ void	free_table(t_table *table)
 		i++;
 	}
 	pthread_mutex_destroy(&table->print_mutex);
+	pthread_mutex_init(&table->state_mutex, NULL);
 	free(table->forks);
 	free(table->philos);
 	free(table->args);
@@ -58,20 +63,8 @@ int	init_forks(t_table *table)
 	i = 0;
 	while (i < table->args->philo_num)
 	{
-		if (pthread_mutex_init(&table->forks[i], NULL) != 0)
-		{
-			while (--i >= 0)
-				pthread_mutex_destroy(&table->forks[i]);
-			free_table(table);
-			return (-1);
-		}
-		if (pthread_mutex_init(&table->philos[i].state_mutex, NULL) != 0)
-		{
-			while (--i >= 0)
-				pthread_mutex_destroy(&table->philos[i].state_mutex);
-			free_table(table);
-			return (-1);
-		}
+		pthread_mutex_init(&table->forks[i], NULL);
+		pthread_mutex_init(&table->philos[i].state_mutex, NULL);
 		i++;
 	}
 	return (0);
@@ -79,15 +72,18 @@ int	init_forks(t_table *table)
 
 void	init_philo(t_philo *philo, int id, t_table *table)
 {
-	philo->dead = 0;
 	philo->id = id;
 	philo->args = table->args;
-	philo->last_meal = get_timestamp();
+	philo->table = table;
 	philo->thread = 0;
-	philo->meal_times = 0;
-	philo->print = &table->print_mutex;
 	philo->left_fork = &table->forks[id];
 	philo->right_fork = &table->forks[(id + 1) % table->args->philo_num];
+	philo->print = &table->print_mutex;
+	philo->last_meal = get_timestamp();
+	philo->meal_times = 0;
+	pthread_mutex_init(&philo->state_mutex, NULL);
+	philo->dead = 0;
+	philo->full = 0;
 }
 
 void	init_philos(t_table *table)
