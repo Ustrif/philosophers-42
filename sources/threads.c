@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:05:16 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/01 14:03:25 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/01 14:05:21 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ void	*monitor(void *table)
 		if (i == t->args->philo_num)
 			i = 0;
 	}
-	pthread_mutex_unlock(&t->philos[i].state_mutex);
 	pthread_mutex_lock(&t->state_mutex);
 	t->dead = 1;
 	pthread_mutex_unlock(&t->state_mutex);
