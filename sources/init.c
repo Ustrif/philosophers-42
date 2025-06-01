@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 20:05:37 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/05/31 16:50:57 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/01 09:18:20 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ t_table	*init_table(t_args *args)
 		free(table);
 		return (NULL);
 	}
-	table->f = 0;
 	return (table);
 }
 
@@ -84,7 +83,6 @@ void	init_philo(t_philo *philo, int id, t_table *table)
 	philo->last_meal = get_timestamp();
 	philo->thread = 0;
 	philo->meal_times = 0;
-	philo->f = &table->f;
 	philo->print = &table->print_mutex;
 	philo->left_fork = &table->forks[id];
 	philo->right_fork = &table->forks[(id + 1) % table->args->philo_num];

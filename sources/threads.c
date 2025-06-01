@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:05:16 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/05/31 17:30:33 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/01 09:17:53 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 void	print_status(t_philo	*p, char *t, int time, int id)
 {
 	pthread_mutex_lock(p->print);
-	if (*p->f != 1)
-		printf("%d %d %s\n", time, id, t);
+	printf("%d %d %s\n", time, id, t);
 	pthread_mutex_unlock(p->print);
 }
 
@@ -27,7 +26,7 @@ void	*routine(void *p)
 
 	time = get_timestamp();
 	philo = (t_philo *) p;
-	while (*philo->f == 0)
+	while (1)
 	{
 		if (philo->id % 2 == 0)
 		{
@@ -75,7 +74,6 @@ void	*monitor(void *table)
 			i = 0;
 	}
 	printf("%lld %d died\n", get_timestamp() - time, i);
-	t->f = 1;
 	return (NULL);
 }
 

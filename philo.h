@@ -40,7 +40,6 @@ typedef struct s_philo
 	pthread_mutex_t	*print;
 	long long		last_meal;
 	int				meal_times;
-	int				*f;
 }				t_philo;
 
 typedef struct s_table
@@ -50,7 +49,6 @@ typedef struct s_table
 	long			start_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_mutex;
-	int				f;
 }				t_table;
 
 int			arg_check(char **argv);
