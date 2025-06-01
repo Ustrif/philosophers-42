@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 20:05:37 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/01 09:18:20 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/01 10:24:33 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,7 @@ t_table	*init_table(t_args *args)
 		free(table);
 		return (NULL);
 	}
-	if (pthread_mutex_init(&table->print_mutex, NULL) != 0)
-	{
-		free(table->forks);
-		free(table->philos);
-		free(table);
-		return (NULL);
-	}
+	pthread_mutex_init(&table->print_mutex, NULL);
 	return (table);
 }
 
@@ -71,6 +65,13 @@ int	init_forks(t_table *table)
 			free_table(table);
 			return (-1);
 		}
+		if (pthread_mutex_init(&table->philos[i].state_mutex, NULL) != 0)
+		{
+			while (--i >= 0)
+				pthread_mutex_destroy(&table->philos[i].state_mutex);
+			free_table(table);
+			return (-1);
+		}
 		i++;
 	}
 	return (0);
@@ -78,6 +79,7 @@ int	init_forks(t_table *table)
 
 void	init_philo(t_philo *philo, int id, t_table *table)
 {
+	philo->dead = 0;
 	philo->id = id;
 	philo->args = table->args;
 	philo->last_meal = get_timestamp();

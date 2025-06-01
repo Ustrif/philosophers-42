@@ -40,7 +40,10 @@ typedef struct s_philo
 	pthread_mutex_t	*print;
 	long long		last_meal;
 	int				meal_times;
+	pthread_mutex_t	state_mutex;
+	int				dead;
 }				t_philo;
+
 
 typedef struct s_table
 {

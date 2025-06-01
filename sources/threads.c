@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:05:16 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/01 09:17:53 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/01 10:37:58 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,13 @@ void	*routine(void *p)
 	philo = (t_philo *) p;
 	while (1)
 	{
+		if (get_timestamp() - philo->last_meal > philo->args->time_to_die)
+		{
+			pthread_mutex_lock(&philo->state_mutex);
+			philo->dead = 1;
+			pthread_mutex_unlock(&philo->state_mutex);
+			break ;
+		}
 		if (philo->id % 2 == 0)
 		{
 			pthread_mutex_lock(philo->left_fork);
@@ -48,6 +55,8 @@ void	*routine(void *p)
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
 		philo->last_meal = get_timestamp();
+		if (philo->meal_times == philo->args->loop_time)
+			break ;
 		print_status(philo, "is sleeping", get_timestamp() - time, philo->id);
 		usleep(philo->args->time_to_sleep * 1000);
 		print_status(philo, "is thinking", get_timestamp() - time, philo->id);
@@ -66,13 +75,16 @@ void	*monitor(void *table)
 	time = get_timestamp();
 	while (1)
 	{
-		if ((get_timestamp() - t->philos[i].last_meal) > t->args->time_to_die)
+		pthread_mutex_lock(&t->philos[i].state_mutex);
+		if (t->philos[i].dead == 1)
 			break ;
+		pthread_mutex_unlock(&t->philos[i].state_mutex);
 		usleep(500);
 		i++;
 		if (i == t->args->philo_num)
 			i = 0;
 	}
+	pthread_mutex_unlock(&t->philos[i].state_mutex);
 	printf("%lld %d died\n", get_timestamp() - time, i);
 	return (NULL);
 }
