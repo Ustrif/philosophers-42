@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:05:16 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/01 14:18:01 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/01 18:40:11 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,8 @@ void	*monitor(void *table)
 			i = 0;
 	}
 	pthread_mutex_lock(&t->state_mutex);
-	t->dead = 1;
+	if (flag)
+		t->dead = 1;
 	pthread_mutex_unlock(&t->state_mutex);
 	if (flag)
 		printf("%lld %d died\n", get_timestamp() - time, i);
@@ -147,6 +148,8 @@ void	main_program(t_table *table)
 
 	num = table->args->philo_num;
 	if (num >= 2 && num <= 3)
+		main_two(table);
+	else if (num == 4)
 		main_two(table);
 	/*if (num == 3)
 	else if (num % 2 == 0 && num > 4)*/
