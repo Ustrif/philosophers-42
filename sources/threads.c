@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:05:16 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/02 10:46:13 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/02 15:30:22 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ void	*routine(void *p)
 			break ;
 		}
 		pthread_mutex_unlock(&philo->table->state_mutex);
-		take_forks(philo, time);
+		if (philo->args->philo_num % 2 == 0)
+			take_forks(philo, time);
+		else
+			take_forks1(philo, time);
 		philo_cycle(philo, time);
 	}
 	pthread_mutex_lock(&philo->state_mutex);

@@ -73,5 +73,6 @@ void		print_status(t_philo	*p, char *t, long long time, int id);
 void		take_forks(t_philo *philo, long long time);
 void		*monitor(void *table);
 void		*routine(void *p);
+void	take_forks1(t_philo *philo, long long time);
 
 #endif
