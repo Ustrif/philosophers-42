@@ -6,29 +6,11 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:05:16 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/01 20:48:15 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/02 10:46:13 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
-void	take_forks(t_philo *philo, long long time)
-{
-	if (philo->id % 2 == 0)
-	{
-		pthread_mutex_lock(philo->left_fork);
-		print_status(philo, "has taken a fork", time, philo->id);
-		pthread_mutex_lock(philo->right_fork);
-		print_status(philo, "has taken a fork", time, philo->id);
-	}
-	else
-	{
-		pthread_mutex_lock(philo->right_fork);
-		print_status(philo, "has taken a fork", time, philo->id);
-		pthread_mutex_lock(philo->left_fork);
-		print_status(philo, "has taken a fork", time, philo->id);
-	}
-}
 
 void	philo_cycle(t_philo *philo, long long time)
 {
@@ -70,55 +52,6 @@ void	*routine(void *p)
 	return (NULL);
 }
 
-void	*monitor(void *table)
-{
-	t_table		*t;
-	int			i;
-	long long	time;
-	int			y;
-	int			flag;
-
-	t = (t_table *) table;
-	i = 0;
-	flag = 1;
-	time = get_timestamp();
-	while (flag)
-	{
-		pthread_mutex_lock(&t->philos[i].state_mutex);
-		if ((get_timestamp() - t->philos[i].last_meal) > t->args->time_to_die)
-		{
-			pthread_mutex_unlock(&t->philos[i].state_mutex);
-			break ;
-		}
-		pthread_mutex_unlock(&t->philos[i].state_mutex);
-		usleep(500);
-		y = 0;
-		while (y < t->args->philo_num)
-		{
-			pthread_mutex_lock(&t->philos[i].state_mutex);
-			if (t->philos[i].full != 1)
-			{
-				pthread_mutex_unlock(&t->philos[i].state_mutex);
-				break ;
-			}
-			pthread_mutex_unlock(&t->philos[i].state_mutex);
-			y++;
-			if ((y < t->args->philo_num) == 0)
-				flag = 0;
-		}
-		i++;
-		if (i == t->args->philo_num)
-			i = 0;
-	}
-	pthread_mutex_lock(&t->state_mutex);
-	if (flag)
-		t->dead = 1;
-	pthread_mutex_unlock(&t->state_mutex);
-	if (flag)
-		printf("%lld %d died\n", get_timestamp() - time, i + 1);
-	return (NULL);
-}
-
 void	main_two(t_table	*table)
 {
 	pthread_t	mt;
@@ -130,14 +63,20 @@ void	main_two(t_table	*table)
 	while (i < table->args->philo_num)
 	{
 		pthread_create(&table->philos[i].thread, n, routine, &table->philos[i]);
-		i++;
+		usleep(200);
+		i = i + 2;
+		if (i == table->args->philo_num)
+			i = 1;
 	}
 	pthread_create(&mt, n, monitor, table);
 	i = 0;
 	while (i < table->args->philo_num)
 	{
 		pthread_join(table->philos[i].thread, n);
-		i++;
+		usleep(200);
+		i = i + 2;
+		if (i == table->args->philo_num)
+			i = 1;
 	}
 	pthread_join(mt, n);
 }

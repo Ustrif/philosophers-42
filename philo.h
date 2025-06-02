@@ -70,5 +70,8 @@ t_table		*get_my_table(t_args *args);
 void		main_two(t_table	*table);
 void		main_odd(t_table *table);
 void		print_status(t_philo	*p, char *t, long long time, int id);
+void		take_forks(t_philo *philo, long long time);
+void		*monitor(void *table);
+void		*routine(void *p);
 
 #endif
