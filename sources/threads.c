@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:05:16 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/21 15:47:36 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/21 15:56:48 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	*routine(void *p)
 	time = get_timestamp();
 	philo = (t_philo *) p;
 	while (philo->meal_times < philo->args->loop_time
-			|| philo->args->loop_time == -1)		
+		|| philo->args->loop_time == -1)
 	{
 		pthread_mutex_lock(&philo->table->state_mutex);
 		if (philo->table->dead == 1)
@@ -53,6 +53,26 @@ void	*routine(void *p)
 	return (NULL);
 }
 
+void	joiner(t_table *table)
+{
+	int	i;
+
+	i = 0;
+	while (i < table->args->philo_num)
+	{
+		pthread_join(table->philos[i].thread, NULL);
+		usleep(100);
+		i = i + 2;
+	}
+	i = 1;
+	while (i < table->args->philo_num)
+	{
+		pthread_join(table->philos[i].thread, NULL);
+		usleep(100);
+		i = i + 2;
+	}
+}
+
 void	main_two(t_table *table)
 {
 	pthread_t	mt;
@@ -61,31 +81,20 @@ void	main_two(t_table *table)
 	i = 0;
 	while (i < table->args->philo_num)
 	{
-		pthread_create(&table->philos[i].thread, NULL, routine, &table->philos[i]);
+		pthread_create(&table->philos[i].thread, NULL, routine,
+			&table->philos[i]);
 		usleep(100);
 		i = i + 2;
 	}
 	i = 1;
 	while (i < table->args->philo_num)
 	{
-		pthread_create(&table->philos[i].thread, NULL, routine, &table->philos[i]);
+		pthread_create(&table->philos[i].thread, NULL, routine,
+			&table->philos[i]);
 		usleep(100);
 		i = i + 2;
 	}
 	pthread_create(&mt, NULL, monitor, table);
-	i = 0;
-	while (i < table->args->philo_num)
-	{
-		pthread_join(table->philos[i].thread, NULL);
-		usleep(100);
-		i = i + 2;
-	}
-	i = 1;
-	while (i < table->args->philo_num)
-	{
-		pthread_join(table->philos[i].thread, NULL);
-		usleep(100);
-		i = i + 2;
-	}
+	joiner(table);
 	pthread_join(mt, NULL);
 }

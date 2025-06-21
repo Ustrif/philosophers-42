@@ -10,9 +10,13 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRC = main.c sources/*.c #düzenle.
+SRC = main.c sources/arg.c sources/init.c sources/init1.c \
+	sources/monitor.c sources/others.c sources/print.c sources/threads.c \
+	sources/timestamp.c
 CFLAGS = -Wall -Wextra -Werror -pthread
 NAME = philo
+
+all: $(NAME)
 
 $(NAME): $(SRC)
 	$(CC) $(CFLAGS) $(SRC) -o $(NAME)
