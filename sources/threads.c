@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:05:16 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/02 15:30:22 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/21 15:47:36 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ void	*routine(void *p)
 
 	time = get_timestamp();
 	philo = (t_philo *) p;
-	while (philo->meal_times != philo->args->loop_time)
+	while (philo->meal_times < philo->args->loop_time
+			|| philo->args->loop_time == -1)		
 	{
 		pthread_mutex_lock(&philo->table->state_mutex);
 		if (philo->table->dead == 1)
@@ -43,10 +44,7 @@ void	*routine(void *p)
 			break ;
 		}
 		pthread_mutex_unlock(&philo->table->state_mutex);
-		if (philo->args->philo_num % 2 == 0)
-			take_forks(philo, time);
-		else
-			take_forks1(philo, time);
+		take_forks(philo, time);
 		philo_cycle(philo, time);
 	}
 	pthread_mutex_lock(&philo->state_mutex);
@@ -55,60 +53,39 @@ void	*routine(void *p)
 	return (NULL);
 }
 
-void	main_two(t_table	*table)
+void	main_two(t_table *table)
 {
 	pthread_t	mt;
 	int			i;
-	void		*n;
 
 	i = 0;
-	n = NULL;
 	while (i < table->args->philo_num)
 	{
-		pthread_create(&table->philos[i].thread, n, routine, &table->philos[i]);
-		usleep(200);
+		pthread_create(&table->philos[i].thread, NULL, routine, &table->philos[i]);
+		usleep(100);
 		i = i + 2;
-		if (i == table->args->philo_num)
-			i = 1;
 	}
-	pthread_create(&mt, n, monitor, table);
-	i = 0;
-	while (i < table->args->philo_num)
-	{
-		pthread_join(table->philos[i].thread, n);
-		usleep(200);
-		i = i + 2;
-		if (i == table->args->philo_num)
-			i = 1;
-	}
-	pthread_join(mt, n);
-}
-
-void	main_odd(t_table *table)
-{
-	pthread_t	mt;
-	int			i;
-	void		*n;
-
-	i = 1;
-	n = NULL;
-	while (i < table->args->philo_num)
-	{
-		pthread_create(&table->philos[i].thread, n, routine, &table->philos[i]);
-		usleep(200);
-		i = i + 2;
-		if (i == table->args->philo_num)
-			i = 0;
-	}
-	pthread_create(&mt, n, monitor, table);
 	i = 1;
 	while (i < table->args->philo_num)
 	{
-		pthread_join(table->philos[i].thread, n);
-		usleep(200);
+		pthread_create(&table->philos[i].thread, NULL, routine, &table->philos[i]);
+		usleep(100);
 		i = i + 2;
-		if (i == table->args->philo_num)
-			i = 0;
 	}
-	pthread_join(mt, n);
+	pthread_create(&mt, NULL, monitor, table);
+	i = 0;
+	while (i < table->args->philo_num)
+	{
+		pthread_join(table->philos[i].thread, NULL);
+		usleep(100);
+		i = i + 2;
+	}
+	i = 1;
+	while (i < table->args->philo_num)
+	{
+		pthread_join(table->philos[i].thread, NULL);
+		usleep(100);
+		i = i + 2;
+	}
+	pthread_join(mt, NULL);
 }

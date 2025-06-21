@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 10:46:18 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/02 11:47:19 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/21 14:55:35 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void	*monitor1(t_table *t, int flag, int i, int y)
 	{
 		if (control(t, i))
 			break ;
-		usleep(500);
 		y = 0;
 		while (y < t->args->philo_num)
 		{

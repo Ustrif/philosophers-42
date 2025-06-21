@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:29:55 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/02 14:24:28 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/21 15:47:55 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,8 @@ void	main_program(t_table *table)
 	long long	time;
 
 	num = table->args->philo_num;
-	if (num >= 2 && num % 2 == 0)
+	if (num >= 2)
 		main_two(table);
-	else if (num >= 2 && num % 2 != 0)
-		main_odd(table);
 	else if (num == 1)
 	{
 		time = get_timestamp() - table->start_time;
@@ -53,6 +51,3 @@ int	main(int argc, char **argv)
 	free_table(table);
 	return (0);
 }
-
-// -g kaldir.
-// 

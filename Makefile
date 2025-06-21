@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 SRC = main.c sources/*.c #düzenle.
-CFLAGS = -Wall -Wextra -Werror -pthread -g #-fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror -pthread
 NAME = philo
 
 $(NAME): $(SRC)
