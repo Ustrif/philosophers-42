@@ -6,7 +6,7 @@
 /*   By: raydogmu <raydogmu@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 20:05:37 by raydogmu          #+#    #+#             */
-/*   Updated: 2025/06/21 15:12:40 by raydogmu         ###   ########.fr       */
+/*   Updated: 2025/06/23 23:15:19 by raydogmu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,11 @@ void	free_table(t_table *table)
 	while (i < table->args->philo_num)
 	{
 		pthread_mutex_destroy(&table->forks[i]);
+		pthread_mutex_destroy(&table->philos[i]->state_mutex);
 		i++;
 	}
 	pthread_mutex_destroy(&table->print_mutex);
-	pthread_mutex_init(&table->state_mutex, NULL);
+	pthread_mutex_destroy(&table->state_mutex);
 	free(table->forks);
 	free(table->philos);
 	free(table->args);
